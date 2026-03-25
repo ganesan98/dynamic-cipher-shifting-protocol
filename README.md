@@ -1,59 +1,45 @@
-==========================================================================
-PROJECT ANTIGRAVITY: ADAPTIVE CIPHER-SHIFTING PROTOCOL (ACSP)
-==========================================================================
+# Dynamic Cipher-Shifting Protocol
 
-[1.0] OVERVIEW
---------------------------------------------------------------------------
-Project Antigravity is a high-performance, bare-metal communication 
-protocol built in C++. It features a "shape-shifting" architecture that 
-dynamically swaps encryption ciphers mid-stream based on real-time 
-network latency.
+A UDP-based client-server system that dynamically selects encryption strategies based on real-time network latency.
 
-[2.0] THE PROBLEM
---------------------------------------------------------------------------
-Standard secure sockets (like TLS/SSL) negotiate a single cipher for an 
-entire session. In high-speed environments (gaming, VoIP), a sudden 
-latency spike combined with heavy encryption (AES-256) causes packet 
-loss and "rubber-banding." 
+---
 
-[3.0] THE SOLUTION
---------------------------------------------------------------------------
-This protocol uses a custom 2-bit header injected into the UDP datagram. 
-By monitoring live ping, the system uses a mathematical decision engine 
-to downshift to lighter cryptography (like Speck) during lag spikes to 
-keep the connection alive, and snaps back to heavy security (AES) when 
-the network recovers.
+## 🚀 What it does
 
-[4.0] THE OPTIMIZATION MATH
---------------------------------------------------------------------------
-The Decision Engine uses the following Linear Algebra Cost Function:
+- Monitors network latency (ping)
+- Chooses an optimal cipher dynamically
+- Embeds cipher ID into packet header
+- Server decodes and processes accordingly
 
-J(c) = alpha * L(c) + beta * (1 / S(c))
+---
 
-Where:
-- J(c)   : Total Cost (System selects the cipher with the lowest J)
-- L(c)   : Total Latency (Current Ping * Cipher Multiplier)
-- S(c)   : Security Score of the cipher
-- alpha  : Weight for Speed (Latency priority)
-- beta   : Weight for Security (Protection priority)
+## 🧠 How it works
 
-[5.0] REPOSITORY STRUCTURE
---------------------------------------------------------------------------
-- server.cpp       : The UDP listener and bit-stripping node.
-- client.cpp       : The interactive sender with IPC bridge.
-- CipherEngine.cpp : The cryptographic routing hardware.
-- optimizer.py     : The mathematical brain (Decision Engine).
+1. Client takes network latency as input  
+2. Python script selects the best cipher  
+3. Cipher ID is added to the packet header  
+4. Server reads the header and processes the message  
 
-[6.0] EXECUTION COMMANDS
---------------------------------------------------------------------------
-To Compile:
+---
+
+## ⚙️ Tech Stack
+
+- C++
+- Python
+- Winsock (UDP Networking)
+
+---
+
+## 🛠️ How to run
+
+### Compile
+```bash
 g++ server.cpp CipherEngine.cpp -o server.exe -lws2_32
 g++ client.cpp -o client.exe -lws2_32
 
-To Run:
-1. Start Server: cmd /c server.exe
-2. Start Client: .\client.exe
+RUN
+# Terminal 1
+server.exe
 
-==========================================================================
-BUILD COMPLETE | STATUS: OPTIMIZED
-==========================================================================
+# Terminal 2
+client.exe
